@@ -1,3 +1,6 @@
+package br.com.ada.agenda;
+
+
 public class Telefone {
 
     public TipoTelefone tipo;

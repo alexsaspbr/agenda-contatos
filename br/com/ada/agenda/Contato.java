@@ -1,8 +1,9 @@
-import br.com.ada.Conduzir;
+package br.com.ada.agenda;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Contato {
@@ -12,6 +13,18 @@ public class Contato {
     public String empresa;
     public String email;
     public List<Telefone> telefones;
+
+    public Contato(String nome, String sobreNome, String empresa) {
+        this(nome, sobreNome, empresa, new ArrayList<>());
+    }
+
+    public String getNome(){
+        return nome;
+    }
+
+    public String getSobreNome() {
+        return sobreNome;
+    }
 
     public Contato (String nome, String sobreNome, String empresa, List<Telefone> telefones) {
         this.nome = nome;
@@ -24,6 +37,19 @@ public class Contato {
         return telefones.stream().map(t -> {
             return String.format("%s (%s) %s", t.ddi, t.ddd, t.numero);
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contato contato = (Contato) o;
+        return nome.equals(contato.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome);
     }
 
     @Override

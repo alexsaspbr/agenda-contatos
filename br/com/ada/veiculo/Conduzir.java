@@ -1,4 +1,4 @@
-package br.com.ada;
+package br.com.ada.veiculo;
 
 public interface Conduzir {
 
