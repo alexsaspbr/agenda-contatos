@@ -35,7 +35,41 @@ public class Main {
 
         Carrinho carrinho = new Carrinho(itens);
 
+       /* carrinho.getItens().stream()
+                           .map(item -> {
+                                return "Produto: " + item.getProduto().getNome() + "" +
+                                        " Valor Unitário " + item.getProduto().getValor();
+                            })
+                            .forEach(System.out::println);*/
 
+/*        carrinho.getItens()
+                .forEach(item -> System.out.printf("Produto: %-15s Valor Unitário: %9s%n",
+                        item.getProduto().getNome(),
+                        item.getProduto().getValor()));*/
+
+/*        for(Item item : carrinho.getItens()) {
+            System.out.printf("Produto: %-15s Valor Unitário: %9s%n",
+                    item.getProduto().getNome(),
+                    item.getProduto().getValor());
+        }*/
+
+        BigDecimal total = carrinho.getItens().stream()
+                .map(item -> item.getProduto().getValor().multiply(new BigDecimal(item.getQuantidade())))
+                //.forEach(System.out::println);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //System.out.println("Total " + total);
+
+
+        Optional<BigDecimal> optionalTotal = carrinho.getItens().stream()
+                .map(item -> item.getProduto().getValor().multiply(new BigDecimal(item.getQuantidade())))
+                //.forEach(System.out::println);
+                .reduce(BigDecimal::add);
+
+        optionalTotal.ifPresent(System.out::println);
+        optionalTotal.ifPresent(carrinho::setTotal);
+
+        carrinho.setTotal(total);
 
     }
 
