@@ -1,5 +1,6 @@
 package br.com.ada.agenda;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +14,15 @@ public class Contato {
 
     private List<Endereco> enderecos;
 
+
+    public Contato(String nome, String sobreNome, String empresa, String email) {
+        this.nome = nome;
+        this.sobreNome = sobreNome;
+        this.empresa = empresa;
+        this.email = email;
+        this.telefones = new ArrayList<>();
+        this.enderecos = new ArrayList<>();
+    }
 
     public Contato (String nome, String sobreNome, String empresa, List<Telefone> telefones, List<Endereco> enderecos) {
         this.nome = nome;
@@ -75,12 +85,12 @@ public class Contato {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contato contato = (Contato) o;
-        return nome.equals(contato.nome);
+        return Objects.equals(nome, contato.nome) && Objects.equals(sobreNome, contato.sobreNome) && Objects.equals(empresa, contato.empresa) && Objects.equals(email, contato.email) && Objects.equals(telefones, contato.telefones) && Objects.equals(enderecos, contato.enderecos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome);
+        return Objects.hash(nome, sobreNome, empresa, email, telefones, enderecos);
     }
 
     @Override
