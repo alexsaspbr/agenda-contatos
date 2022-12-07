@@ -1,22 +1,20 @@
 package br.com.ada.agenda;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Agenda {
+    private List<Contato> contatos;
 
-    public Contato contato;
-    private String descricao;
-    public List<Contato> contatos;
-
-    public Agenda(){}
-
-    public Agenda(Contato contato){
-        this.contato = contato;
+    public Agenda(){
+        this.contatos = new ArrayList<>();
     }
 
-    public Agenda(String descricao, List<Contato> contatos) {
-        this.descricao = descricao;
+    public List<Contato> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(List<Contato> contatos) {
         this.contatos = contatos;
     }
-
 }
