@@ -22,16 +22,16 @@ public class Agenda {
     public void adicionarContato(Scanner entrada) {
 
         System.out.println("Nome do Contato");
-        String nome = entrada.next();
+        String nome = entrada.nextLine();
 
         System.out.println("Sobrenome do Contato");
-        String sobreNome = entrada.next();
+        String sobreNome = entrada.nextLine();
 
         System.out.println("E-mail do Contato");
-        String email = entrada.next();
+        String email = entrada.nextLine();
 
         System.out.println("Empresa do Contato");
-        String empresa = entrada.next();
+        String empresa = entrada.nextLine();
 
         Contato novoContato = new Contato(nome, sobreNome, empresa, email);
 

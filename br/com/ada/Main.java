@@ -34,7 +34,7 @@ public class Main {
             System.out.println("Escolha uma opção: \n");
             System.out.println("1 - Adicionar Contato   2 - Listar Contatos");
 
-            switch (entrada.nextInt()) {
+            switch (Integer.parseInt(entrada.nextLine())) {
 
                 case 1:
                     agenda.adicionarContato(entrada);
@@ -51,7 +51,7 @@ public class Main {
             }
 
             System.out.println("Deseja continuar? 1 - Sim, 2 - Não");
-            resposta = entrada.nextInt();
+            resposta = Integer.parseInt(entrada.nextLine());
 
         } while(resposta == 1);
 
