@@ -2,6 +2,7 @@ package br.com.ada;
 
 import br.com.ada.agenda.Agenda;
 import br.com.ada.agenda.Contato;
+import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.Scanner;
 
@@ -19,18 +20,28 @@ public class Main {
 
         do {
 
-            System.out.println("####### AGENDA CONTATOS ##########\n");
+          /*  AsciiTable at = new AsciiTable();
+
+            at.addRule();
+            at.addRow("row 1 col 1", "row 1 col 2");
+            at.addRule();
+            at.addRow("row 2 col 1", "row 2 col 2");
+            at.addRule();
+
+            System.out.println(at.render());*/
+
+            System.out.println("####### AGENDA CONTATOS #########\n");
             System.out.println("Escolha uma opção: \n");
             System.out.println("1 - Adicionar Contato   2 - Listar Contatos");
 
             switch (entrada.nextInt()) {
 
                 case 1:
-                    adicionarContato(entrada);
+                    agenda.adicionarContato(entrada);
                     break;
 
                 case 2:
-                    listarContatos();
+                    agenda.listarContatos();
                     break;
 
                 default:
@@ -44,42 +55,6 @@ public class Main {
 
         } while(resposta == 1);
 
-
-    }
-
-    private static void listarContatos() {
-        agenda.getContatos().forEach(contato -> {
-            System.out.println(contato.getNome()
-                    .concat(" ")
-                    .concat(contato.getSobreNome())
-                    .concat(" ")
-                    .concat(contato.getEmail()));
-        });
-    }
-
-    private static void adicionarContato(Scanner entrada) {
-
-        System.out.println("Nome do Contato");
-        String nome = entrada.next();
-
-        System.out.println("Sobrenome do Contato");
-        String sobreNome = entrada.next();
-
-        System.out.println("E-mail do Contato");
-        String email = entrada.next();
-
-        System.out.println("Empresa do Contato");
-        String empresa = entrada.next();
-
-        Contato novoContato = new Contato(nome, sobreNome, empresa, email);
-
-        boolean contatoExiste = agenda.getContatos()
-                .stream().anyMatch(contato -> contato.equals(novoContato));
-
-        if(!contatoExiste)
-            agenda.getContatos().add(novoContato);
-        else
-            System.out.println("O contato já existe");
     }
 
 }
