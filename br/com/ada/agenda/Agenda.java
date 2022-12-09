@@ -1,8 +1,9 @@
 package br.com.ada.agenda;
 
+import br.com.ada.agenda.util.ConsoleUIHelper;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Agenda {
     private List<Contato> contatos;
@@ -19,19 +20,12 @@ public class Agenda {
         this.contatos = contatos;
     }
 
-    public void adicionarContato(Scanner entrada) {
+    public void adicionarContato() {
 
-        System.out.println("Nome do Contato");
-        String nome = entrada.nextLine();
-
-        System.out.println("Sobrenome do Contato");
-        String sobreNome = entrada.nextLine();
-
-        System.out.println("E-mail do Contato");
-        String email = entrada.nextLine();
-
-        System.out.println("Empresa do Contato");
-        String empresa = entrada.nextLine();
+        String nome = ConsoleUIHelper.askSimpleInput("Nome do Contato");
+        String sobreNome = ConsoleUIHelper.askSimpleInput("Sobrenome do Contato");
+        String email = ConsoleUIHelper.askSimpleInput("E-mail do Contato");
+        String empresa = ConsoleUIHelper.askSimpleInput("Empresa do Contato");
 
         Contato novoContato = new Contato(nome, sobreNome, empresa, email);
 
@@ -46,21 +40,21 @@ public class Agenda {
 
     public void listarContatos() {
 
+        int width = 80;
+
         if(!this.contatos.isEmpty()){
-
-            this.contatos.forEach(contato -> {
-                System.out.println(
-                         String.valueOf(this.contatos.indexOf(contato)+1)
-                         .concat(" ")
-                         .concat(contato.getNome())
-                        .concat(" ")
-                        .concat(contato.getSobreNome())
-                        .concat(" ")
-                        .concat(contato.getEmail()));
-            });
-
+            this.contatos.stream()
+                      .map(contato -> {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(ConsoleUIHelper.columnPaddingRight(String.valueOf(this.contatos.indexOf(contato)+1), 3, ' '));
+                        sb.append(ConsoleUIHelper.columnPaddingRight((contato.getNome() + " " + contato.getSobreNome()), 52, ' '));
+                        sb.append(ConsoleUIHelper.columnPaddingRight(contato.getEmail(), 25, ' '));
+                        return sb.toString();
+                    })
+                   .forEach(System.out::println);
+            ConsoleUIHelper.drawLine(width);
         } else {
-            System.out.println("Não há contatos");
+            ConsoleUIHelper.drawWithPadding("Não há contatos", width);
         }
     }
 

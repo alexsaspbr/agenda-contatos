@@ -15,11 +15,11 @@ public class Contato {
     private List<Endereco> enderecos;
 
 
-    public Contato(String nome, String sobreNome, String empresa, String email) {
+    public Contato(String nome, String sobreNome, String email, String empresa) {
         this.nome = nome;
         this.sobreNome = sobreNome;
-        this.empresa = empresa;
         this.email = email;
+        this.empresa = empresa;
         this.telefones = new ArrayList<>();
         this.enderecos = new ArrayList<>();
     }
