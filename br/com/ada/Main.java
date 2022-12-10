@@ -1,6 +1,7 @@
 package br.com.ada;
 
 import br.com.ada.agenda.Agenda;
+import br.com.ada.agenda.Contato;
 import br.com.ada.agenda.util.ConsoleUIHelper;
 
 public class Main {
@@ -19,7 +20,8 @@ public class Main {
             agenda.listarContatos();
             ConsoleUIHelper.fillVSpace(1, width);
             int opcao = ConsoleUIHelper.askChooseOption("Escolha uma opção"
-                    , "Adicionar Contato");
+                    , "Adicionar Contato",                     //0
+                              "Adicionar um telefone a um contato");   //1
 
             switch (opcao) {
 
@@ -27,6 +29,11 @@ public class Main {
                     agenda.adicionarContato();
                     break;
 
+                case 1:
+                    int codigoContato = Integer.parseInt(ConsoleUIHelper.askSimpleInput("Para qual contato?"));
+                    Contato contato = agenda.getContatoPeloCodigo(codigoContato);
+                    contato.adicionarTelefone();
+                    break;
 
                 default:
 

@@ -1,8 +1,13 @@
 package br.com.ada.agenda;
 
+import br.com.ada.agenda.util.ConsoleUIHelper;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Contato {
 
@@ -65,19 +70,23 @@ public class Contato {
     }
 
     public List<Telefone> getTelefones() {
-        return telefones;
+        return Collections.unmodifiableList(telefones);
     }
 
-    public void setTelefones(List<Telefone> telefones) {
-        this.telefones = telefones;
+    public void addTelefone(Telefone novoTelefone){
+        if(verificaTelefoneExiste(novoTelefone)){
+            throw new RuntimeException("Telefone já cadastrado!");
+        }
+        this.telefones.add(novoTelefone);
+    }
+
+    private boolean verificaTelefoneExiste(Telefone telefone){
+        return this.telefones.stream()
+                .anyMatch(telefoneCadastrado -> telefoneCadastrado.equals(telefone));
     }
 
     public List<Endereco> getEnderecos() {
-        return enderecos;
-    }
-
-    public void setEnderecos(List<Endereco> enderecos) {
-        this.enderecos = enderecos;
+        return Collections.unmodifiableList(enderecos);
     }
 
     @Override
@@ -104,6 +113,31 @@ public class Contato {
         sb.append("Telefones\n\n");
         telefones.forEach(telefones -> sb.append(telefones.toString()).append("\n"));
         return sb.toString();
+    }
+
+    public void adicionarTelefone(){
+        //List<TipoTelefone> tipoTelefones = Arrays.stream(TipoTelefone.values()).toList();
+        List<TipoTelefone> tipoTelefones = Arrays.stream(TipoTelefone.values())
+                .collect(Collectors.toList());
+
+        String menuTipos = tipoTelefones.stream()
+                .map(tipoTelefone -> String.format("%n%s - %s", tipoTelefone.ordinal() + 1, tipoTelefone.name()))
+                .reduce("", String::concat);
+
+        String tipoTelefone = ConsoleUIHelper.askSimpleInput(String.format("Tipo do Telefone%s", menuTipos));
+        TipoTelefone tipo = tipoTelefones.get(Integer.parseInt(tipoTelefone) -1);
+
+        String ddi = ConsoleUIHelper.askSimpleInput("DDI do Telefone");
+        String ddd = ConsoleUIHelper.askSimpleInput("DDD do Telefone");
+        String numero = ConsoleUIHelper.askSimpleInput("Número do Telefone");
+
+        Telefone telefone = new Telefone(tipo, ddi, ddd, numero);
+
+        try{
+            addTelefone(telefone);
+        }catch (RuntimeException exception){
+            System.out.printf("Erro ao cadastrar: %s %n", exception.getMessage());
+        }
     }
 
 }
