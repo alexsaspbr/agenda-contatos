@@ -3,9 +3,12 @@ package br.com.ada.agenda;
 import br.com.ada.agenda.util.ConsoleUIHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Agenda {
+
+    private static final int FATOR_INDICE = 1;
     private List<Contato> contatos;
 
     public Agenda(){
@@ -13,11 +16,27 @@ public class Agenda {
     }
 
     public List<Contato> getContatos() {
-        return contatos;
+        return Collections.unmodifiableList(contatos);
     }
 
-    public void setContatos(List<Contato> contatos) {
-        this.contatos = contatos;
+    public void addContatos(List<Contato> contatos) {
+        contatos.forEach(novoContato -> {
+            if(verificaContatoExiste(novoContato)){
+                throw new RuntimeException("Contato já cadastrado");
+            }
+        });
+
+        if(contatos.stream().distinct().count() != contatos.size()){
+            throw new RuntimeException("Contatos duplicados");
+        }
+
+        this.contatos.addAll(contatos);
+    }
+
+    private boolean verificaContatoExiste(Contato contato){
+        return this.contatos
+                .stream()
+                .anyMatch(contatoCadastrado -> contatoCadastrado.equals(contato));
     }
 
     public void adicionarContato() {
@@ -27,15 +46,13 @@ public class Agenda {
         String email = ConsoleUIHelper.askSimpleInput("E-mail do Contato");
         String empresa = ConsoleUIHelper.askSimpleInput("Empresa do Contato");
 
-        Contato novoContato = new Contato(nome, sobreNome, empresa, email);
+        Contato novoContato = new Contato(nome, sobreNome, email, empresa);
 
-        boolean contatoExiste = this.contatos
-                .stream().anyMatch(contato -> contato.equals(novoContato));
-
-        if(!contatoExiste)
-            this.contatos.add(novoContato);
-        else
-            System.out.println("O contato já existe");
+        try{
+            addContatos(List.of(novoContato));
+        }catch (RuntimeException exception){
+            System.out.printf("Erro ao cadastrar: %s %n", exception.getMessage());
+        }
     }
 
     public void listarContatos() {
@@ -46,7 +63,7 @@ public class Agenda {
             this.contatos.stream()
                       .map(contato -> {
                         StringBuilder sb = new StringBuilder();
-                        sb.append(ConsoleUIHelper.columnPaddingRight(String.valueOf(this.contatos.indexOf(contato)+1), 3, ' '));
+                        sb.append(ConsoleUIHelper.columnPaddingRight(String.valueOf(this.contatos.indexOf(contato)+FATOR_INDICE), 3, ' '));
                         sb.append(ConsoleUIHelper.columnPaddingRight((contato.getNome() + " " + contato.getSobreNome()), 52, ' '));
                         sb.append(ConsoleUIHelper.columnPaddingRight(contato.getEmail(), 25, ' '));
                         return sb.toString();
@@ -58,5 +75,7 @@ public class Agenda {
         }
     }
 
-
+    public Contato getContatoPeloCodigo(int codigoContato) {
+        return this.contatos.get(codigoContato - FATOR_INDICE);
+    }
 }
